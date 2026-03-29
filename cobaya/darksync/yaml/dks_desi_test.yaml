@@ -1,0 +1,79 @@
+theory:
+  classy:
+    path: /data/AMARINS/nuCLASS/
+  #cobaya.theories.darksync.dkscobaya.dksLCDM:
+    stop_at_error: False
+    extra_args:
+      non_linear: null
+      #nuself_type: 'none'
+      #start_small_k_at_tau_c_over_tau_h: 0.0004
+      #start_large_k_at_tau_h_over_tau_k: 0.07
+      #N_ncdm: 1
+      #deg_ncdm: 3.0
+      #has_cmb_chi_window_shift: 'yes'
+      #cmb_chi_shift_zcut: 50.0
+      #cmb_chi_shift_dz: 10.0
+      #perturbations_integration_stepsize: 0.75
+      #tol_perturbations_integration: 0.0001
+      #tol_background_integration: 1.0e-11
+      #ncdm_nuself_fluid_trigger_tau_c_over_tau: 10000    
+
+likelihood:
+  bao.desi_dr2.desi_bao_all:
+    path: null
+
+params:
+  H0:
+    prior:
+      dist: uniform
+      min: 60.0
+      max: 80.0
+    proposal: 0.5
+    latex: H_0
+  Omega_dm:
+    prior:
+      dist: uniform    
+      min: 0.01
+      max: 0.45
+    ref:
+      dist: norm
+      loc: 0.12
+      scale: 0.26
+    proposal: 0.0005
+    latex: \Omega_\mathrm{dm}
+  Omega_b:
+    prior:
+      dist: uniform    
+      min: 0.001
+      max: 0.100
+    ref:
+      dist: norm
+      loc: 0.04
+      scale: 0.0002
+    proposal: 0.0001
+    latex: \Omega_b
+  rdrag:
+    derived: true
+    latex: r_\mathrm{drag}
+
+sampler:
+  mcmc:
+    #burn_in: 100  
+    Rminus1_stop: 0.01  # Gelman-Rubin R-1 on means
+    #Rminus1_single_split: 40 # Default is 4
+    #Rminus1_cl_stop: 0.2 # Default is 0.2 # Gelman-Rubin R-1 on std deviations
+    #Rminus1_cl_level: 0.95 # Default is 0.95
+    #burn_in: 30
+    #proposal_scale: 2.4 # Default, adjust if acceptance rate is too low/high
+    #learn_proposal: True
+    #learn_proposal_Rminus1_max: 2.0 # Default
+    #learn_proposal_Rminus1_max_early: 30.0 # Default
+    #learn_proposal_Rminus1_min: 0.0 # Default
+    max_tries: .inf # Default is 100 * n_params_vary
+    max_samples: .inf #50000 # Set a limit for testing
+    #seed: 42 # PS: in parallel runs, only works until to the first proposer covmat update.
+    measure_speeds: True  
+force: True
+#debug: True     
+
+output: /data/AMARINS/COBAYA_modified/cobaya/cobaya/darksync/outputs/desi_dr2_nuclass

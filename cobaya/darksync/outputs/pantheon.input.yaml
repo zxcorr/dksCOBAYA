@@ -1,0 +1,44 @@
+theory:
+  cobaya.theories.darksync.dkscobaya.dksLCDM: null
+likelihood:
+  sn.pantheonplus: null
+params:
+  H0:
+    prior:
+      dist: uniform
+      min: 60.0
+      max: 80.0
+    proposal: 0.5
+    latex: H_0
+  Omega_dm:
+    prior:
+      dist: uniform
+      min: 0.01
+      max: 0.45
+    ref:
+      dist: norm
+      loc: 0.12
+      scale: 0.26
+    proposal: 0.0005
+    latex: \Omega_\mathrm{dm}
+  Omega_b:
+    prior:
+      dist: uniform
+      min: 0.001
+      max: 0.1
+    ref:
+      dist: norm
+      loc: 0.04
+      scale: 0.0002
+    proposal: 0.0001
+    latex: \Omega_b
+  rdrag:
+    derived: true
+    latex: r_\mathrm{drag}
+sampler:
+  mcmc:
+    Rminus1_stop: 0.01
+    max_tries: .inf
+    max_samples: .inf
+    measure_speeds: true
+output: pantheon
