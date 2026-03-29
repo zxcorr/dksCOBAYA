@@ -69,3 +69,4 @@ ipython_config.py
 *.png
 !docs/img/*.png
 !img/*.png
+cobaya/darksync/outputs/
