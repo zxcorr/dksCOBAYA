@@ -1,5 +1,6 @@
 theory:
-  cobaya.theories.darksync.dkscobaya.dksLCDM:
+  darksync.dksLCDM:
+    #stop_at_error: True
 
 likelihood:
   sn.pantheonplus:
@@ -12,7 +13,7 @@ params:
       max: 80.0
     proposal: 0.5
     latex: H_0
-  Omega_dm:
+  Omega_cdm:
     prior:
       dist: uniform    
       min: 0.01
@@ -58,4 +59,4 @@ sampler:
 force: True
 #debug: True     
 
-output: /data/AMARINS/COBAYA_modified/cobaya/cobaya/darksync/outputs/pantheon
+output: /data/AMARINS/COBAYA_modified/cobaya/cobaya/darksync/outputs/dks_pantheon

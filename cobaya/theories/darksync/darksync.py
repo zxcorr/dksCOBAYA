@@ -31,12 +31,12 @@ z_drag  : Drag epoch redshift (Eisenstein & Hu 1998)
 z_dec   : Decoupling redshift (Hu & Sugiyama 1996)
 
 Omega_m  : Total matter Density Parameter
-Omega_dm : Dark energy Density Parameter
+Omega_cdm : Dark energy Density Parameter
 Omega_b  : Baryon Density Parameter
 
 Usage
 -----
-    model = dks_model(M=..., H0=67.4, Omega_dm=0.22, Omega_b=0.022)
+    model = dks_model(M=..., H0=67.4, Omega_cdm=0.22, Omega_b=0.022)
     Hz, z, failed = model.hubble_z(0.5)
     rs, failed    = model.rs_drag()
 
@@ -60,7 +60,7 @@ TCMB_CTE = 2.7255
 
 class darksync:
     def __init__(self,# M, 
-                 H0, Omega_dm, Omega_b):
+                 H0, Omega_cdm, Omega_b):
         """
         Class constructor. Initialises the parameters, solves the ODE once,
         and builds interpolators for all quantities.
@@ -68,7 +68,7 @@ class darksync:
         self.parameters = {
             #'M': M,
             'H0': H0,
-            'Omega_dm': Omega_dm,
+            'Omega_cdm': Omega_cdm,
             'Omega_b': Omega_b
         }
         self.cosmology_failed = False
@@ -112,8 +112,8 @@ class darksync:
 
         Ps.: Only for SNia?        
         """
-        #M, H0, Omega_dm, Omega_b = self.parameters.values()
-        H0, Omega_dm, Omega_b = self.parameters.values()
+        #M, H0, Omega_cdm, Omega_b = self.parameters.values()
+        H0, Omega_cdm, Omega_b = self.parameters.values()
         pdm, pde, pr, pb, Dc, pg = y
 
         r_t = pdm + pde + pr + pb
@@ -148,21 +148,21 @@ class darksync:
 
         Ps.: Only for SNia?  
         """
-        #M, H0, Omega_dm, Omega_b = self.parameters.values()
-        H0, Omega_dm, Omega_b = self.parameters.values()
+        #M, H0, Omega_cdm, Omega_b = self.parameters.values()
+        H0, Omega_cdm, Omega_b = self.parameters.values()
 
         # Initial conditions
         pc0 = 3 * H0**2 / (8 * np.pi * G_CTE) #critical density today
         h   = H0 / 100
-        Omega_m  = Omega_dm + Omega_b
+        Omega_m  = Omega_cdm + Omega_b
         #zeq = 2.5e4 * Omega_m * h**2 * (2.7255 / 2.7)**(-4) #z at equilibrium rad=matter
         self.zeq = 2.5e4 * Omega_m * h**2 * (TCMB_CTE/ 2.7)**(-4)
         zeq = self.zeq  # keep the local name for the rest of _solve_ode
         #Does this zeq depend on the radiation model?
 
-        pdm0 = Omega_dm * pc0
+        pdm0 = Omega_cdm * pc0
         pr0  = (Omega_m / (1 + zeq)) * pc0
-        pl0  = (1 - Omega_dm - Omega_b - Omega_m / (1 + zeq)) * pc0
+        pl0  = (1 - Omega_cdm - Omega_b - Omega_m / (1 + zeq)) * pc0
         pb0  = Omega_b * pc0
         pg0  = (2.47e-5 * h**-2) * pc0
         y0   = [pdm0, pl0, pr0, pb0, 0., pg0] #[<-wt represent this '0'? wt are we setting '0'? Comovel distance?]
@@ -422,10 +422,10 @@ class darksync:
         if self._rs_drag_cache is not None:
             return self._rs_drag_cache, False
 
-        #M, Omega_dm, Omega_b = self.parameters.values() 
-        H0, Omega_dm, Omega_b = self.parameters.values()
+        #M, Omega_cdm, Omega_b = self.parameters.values() 
+        H0, Omega_cdm, Omega_b = self.parameters.values()
         h  = H0 / 100
-        Omega_m = Omega_dm + Omega_b
+        Omega_m = Omega_cdm + Omega_b
 
         # Eisenstein & Hu fitting formula for z_drag
         b_1 = 0.313 * (Omega_m * h**2)**(-0.419) * (1 + 0.607 * (Omega_m * h**2)**0.674)
@@ -448,34 +448,7 @@ class darksync:
 
     # ------------------------------------------------------------------ #
     #              ADDITIONAL QUANTITIES (CMB, Omega, etc.)               #
-    # ------------------------------------------------------------------ #
-
-    def get_zeq(self):
-        """
-        Redshift at matter-radiation equality.
-        zeq = 2.5e4 * (Omega_dm+Omega_b) * h^2 * (T_cmb/2.7)^-4
-        (Dodelson & Schmidt eq. 2.88 / Kolb & Turner)
-        Output:
-           zeq, FLAG
-        """
-        if self.cosmology_failed:
-            return None, True
-        return self.zeq, False
-    def get_zdrag(self):
-        """
-        Redshift at the drag epoch (baryon decoupling from photons).
-        Eisenstein & Hu (1998) fitting formula.
-        Output:
-           z_drag, FLAG
-        """
-        if self.cosmology_failed:
-            return None, True
-        # rs_drag() must be called first to populate self.z_drag
-        if not hasattr(self, 'z_drag'):
-            _, fail = self.rs_drag()
-            if fail:
-                return None, True
-        return self.z_drag, False        
+    # ------------------------------------------------------------------ #      
     
     def z_dec(self):
         """
@@ -483,9 +456,9 @@ class darksync:
         Output:
            z(dec)
         """
-        M, H0, Omega_dm, Omega_b = self.parameters.values()
+        M, H0, Omega_cdm, Omega_b = self.parameters.values()
         h  = H0 / 100
-        Omega_m = Omega_dm + Omega_b
+        Omega_m = Omega_cdm + Omega_b
         g1 = (0.0738 * (Omega_b * h**2)**-0.238) / (1 + 39.5 * (Omega_b * h**2)**0.763)
         g2 = 0.560 / (1 + 21.1 * (Omega_b * h**2)**1.81)
         z_dec = 1048 * (1 + 0.00124 * (Omega_b * h**2)**-0.738) * (1 + g1 * (Omega_m * h**2)**g2)
@@ -512,8 +485,9 @@ class darksync:
         Output:
            R, FLAG
         """
-        M, H0, Omega_dm, Omega_b = self.parameters.values()
-        Omega_m = Omega_dm + Omega_b
+        #M, H0, Omega_cdm, Omega_b = self.parameters.values()
+        H0, Omega_cdm, Omega_b = self.parameters.values()
+        Omega_m = Omega_cdm + Omega_b
         zdec = self.z_dec()
         dm = self.comoving_distance(zdec)
         if dm[2]:
@@ -543,7 +517,7 @@ class darksync:
         rho_c   = rho_dm+rho_de+rho_rad+rho_b
         Omega_x = rho_x/rho_c
         Output:
-           Omega_dm(z),Omega_de(z),Omega_rad(z),[z],Omega_b(z) 
+           Omega_cdm(z),Omega_de(z),Omega_rad(z),[z],Omega_b(z) 
         """
         pdm, pde, pr, z_sol, pb, Dc, _, failed = self.sol(z)
         if failed:
@@ -560,3 +534,29 @@ class darksync:
         if not self.cosmology_failed:
             rs, _ = self.rs_drag()
             print(f"rs_drag = {rs:.4f} Mpc")
+    def get_zeq(self):
+        """
+        Redshift at matter-radiation equality.
+        zeq = 2.5e4 * (Omega_cdm+Omega_b) * h^2 * (T_cmb/2.7)^-4
+        (Dodelson & Schmidt eq. 2.88 / Kolb & Turner)
+        Output:
+           zeq, FLAG
+        """
+        if self.cosmology_failed:
+            return None, True
+        return self.zeq, False
+    def get_zdrag(self):
+        """
+        Redshift at the drag epoch (baryon decoupling from photons).
+        Eisenstein & Hu (1998) fitting formula.
+        Output:
+           z_drag, FLAG
+        """
+        if self.cosmology_failed:
+            return None, True
+            # rs_drag() must be called first to populate self.z_drag
+        if not hasattr(self, 'z_drag'):
+            _, fail = self.rs_drag()
+            if fail:
+                return None, True
+        return self.z_drag, False              

@@ -20,8 +20,8 @@ class dksLCDM(Theory):
         Output:
             List of parameters to be sampled
         """
-        #return ['M', 'H0', 'Omega_dm', 'Omega_b']# [M]
-        return ['H0', 'Omega_dm', 'Omega_b']# [M]
+        #return ['M', 'H0', 'Omega_cdm', 'Omega_b']# [M]
+        return ['H0', 'Omega_cdm', 'Omega_b']# [M]
 
     def get_can_provide(self):
         """
@@ -50,13 +50,13 @@ class dksLCDM(Theory):
         """
         #M        = params_values_dict['M']
         H0       = params_values_dict['H0']
-        Omega_dm = params_values_dict['Omega_dm']
+        Omega_cdm = params_values_dict['Omega_cdm']
         Omega_b  = params_values_dict['Omega_b']
 
         try:
             # The ODE is solved inside darksync.__init__
-            #self.model = darksync(M, H0, Omega_dm, Omega_b)
-            self.model = darksync(H0, Omega_dm, Omega_b)#[AM: We need to pay attention to model 
+            #self.model = darksync(M, H0, Omega_cdm, Omega_b)
+            self.model = darksync(H0, Omega_cdm, Omega_b)#[AM: We need to pay attention to model 
                                                   #this part in order to accept other parameters]
 
             # Check whether the cosmology failed during integration

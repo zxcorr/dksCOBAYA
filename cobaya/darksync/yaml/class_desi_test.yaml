@@ -1,6 +1,8 @@
 theory:
-  darksync.dksLCDM:
+  classy:
     stop_at_error: False
+    extra_args:
+      non_linear: null
 
 likelihood:
   bao.desi_dr2.desi_bao_all:
@@ -14,7 +16,7 @@ params:
       max: 80.0
     proposal: 0.5
     latex: H_0
-  Omega_cdm:
+  Omega_cx`dm:
     prior:
       dist: uniform    
       min: 0.01
@@ -60,4 +62,4 @@ sampler:
 force: True
 #debug: True     
 
-output: /data/AMARINS/COBAYA_modified/cobaya/cobaya/darksync/outputs/dks_desiDR2
+output: /data/AMARINS/COBAYA_modified/cobaya/cobaya/darksync/outputs/class_desiDR2
