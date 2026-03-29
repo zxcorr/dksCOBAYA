@@ -1,3 +1,43 @@
+DarkSync COBAYA (dksCOBAYA)
+=================
+
+**dksCOBAYA** is a custom extension of `Cobaya <https://github.com/CobayaSampler/cobaya>`_,
+developed by the **USTC FBA team** to support the DarkSync Project.
+
+DarkSync is the acronym for Dark-sector, Anisotropic, and Relativistic relic Kosmology for Self-interactions and Yielding New Consistency.
+
+
+:Project: DarkSync
+:Maintainers: A. Marins, A. A. Escobal, P. Motta, F.B. Abdalla
+:Team: USTC FBA team
+:Repository: 
+:Based on: `Cobaya <https://github.com/CobayaSampler/cobaya>`_
+:License: 
+
+Main features
+-------------
+
+- 
+
+Team members
+------------
+
+- **A. Marins** — role or contribution
+- **A.A. Escobal** — 
+- **P. Motta** — 
+- **F.B. Abdalla** — 
+
+About this fork
+---------------
+
+This repository is a fork and adaptation of the Cobaya framework.
+It preserves the original purpose and structure of Cobaya while introducing
+project-specific extensions developed by our team.
+
+Upstream Cobaya
+---------------
+
+
 *Cobaya*, a code for Bayesian analysis in Cosmology
 ===================================================
 
