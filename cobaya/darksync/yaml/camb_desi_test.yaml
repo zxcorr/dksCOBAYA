@@ -1,9 +1,10 @@
 theory:
-  darksync.dksLCDM:
-    #stop_at_error: True
+  camb:
+    stop_at_error: False
 
 likelihood:
-  sn.pantheonplus:
+  bao.desi_dr2.desi_bao_all:
+    path: null
 
 params:
   H0:
@@ -13,58 +14,52 @@ params:
       max: 80.0
     proposal: 0.5
     latex: H_0
-
-  ombh2:
+  Omega_cdm:
     prior:
-      dist: uniform
-      min: 0.005
-      max: 0.040
+      dist: uniform    
+      min: 0.01
+      max: 0.45
     ref:
       dist: norm
-      loc: 0.0224
-      scale: 0.001
-    proposal: 0.001
-    latex: \Omega_b h^2
-    drop: True          # sampled but NOT passed to your code
-
-  omch2:
+      loc: 0.12
+      scale: 0.26
+    proposal: 0.0005
+    latex: \Omega_\mathrm{c}
+  Omega_b:
     prior:
-      dist: uniform
-      min: 0.05
-      max: 0.25
+      dist: uniform    
+      min: 0.001
+      max: 0.100
     ref:
       dist: norm
-      loc: 0.120
-      scale: 0.003
-    proposal: 0.002
-    latex: \Omega_c h^2
-    drop: True          # sampled but NOT passed to your code
-
-  Omega_b:              # what your code receives
-    value: "lambda ombh2, H0: ombh2 / (H0/100)**2"
-    derived: false
-
-  Omega_cdm:            # what your code receives
-    value: "lambda omch2, H0: omch2 / (H0/100)**2"
-    derived: false
-    
-
+      loc: 0.04
+      scale: 0.0002
+    proposal: 0.0001
+    latex: \Omega_b
   rdrag:
     derived: true
     latex: r_\mathrm{drag}
+    
+  ombh2:
+    value: "lambda Omega_b, H0: Omega_b * (H0/100)**2"
+    derived: false
 
-  omegamh2:
-    derived: "lambda ombh2, omch2: ombh2 + omch2"
-    latex: \Omega_m h^2
-
+  omch2:
+    value: "lambda Omega_cdm, H0: Omega_cdm * (H0/100)**2"
+    derived: false
+    
   omegam:
-    derived: "lambda ombh2, omch2, H0: (ombh2 + omch2) / (H0/100)**2"
+    derived: true
     latex: \Omega_m
 
   Omega_Lambda:
-    derived: "lambda ombh2, omch2, H0: 1 - (ombh2 + omch2) / (H0/100)**2"
+    derived: "lambda omegam: 1 - omegam"
     latex: \Omega_\Lambda
 
+  omk:
+    value: 0.0
+    latex: \Omega_k    
+    
 sampler:
   mcmc:
     #burn_in: 100  
@@ -85,4 +80,4 @@ sampler:
 force: True
 #debug: True     
 
-output: /data/AMARINS/dksCOBAYA/cobaya_outputs/dks_pantheon
+output: /data/AMARINS/dksCOBAYA/cobaya_outputs/camb_desiDR2

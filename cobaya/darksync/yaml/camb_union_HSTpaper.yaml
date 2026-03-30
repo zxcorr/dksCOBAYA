@@ -1,0 +1,67 @@
+theory:
+  camb:
+    stop_at_error: False
+    extra_args:
+      nonlinear: False
+      num_massive_neutrinos: 3
+      neutrino_hierarchy: degenerate
+      mnu: 1.26
+      nnu: 3.044
+
+likelihood:
+  sn.union3:
+    #use_abs_mag: True
+
+params:
+  # ── Sampled ──────────────────────────────
+  Omega_m:
+    prior:
+      dist: uniform
+      min: 0.05
+      max: 0.90
+    ref:
+      dist: norm
+      loc: 0.30
+      scale: 0.01
+    proposal: 0.01
+    latex: \Omega_m
+
+  # ── Fixed (fiducial) ─────────────────────
+  H0:
+    value: 70.0         # degenerate with M_B; absorbed by likelihood
+    latex: H_0
+
+  ombh2:
+    value: 0.0224       # fiducial; irrelevant for SNe distances
+    latex: \Omega_b h^2
+
+  omk:
+    value: 0.0
+    latex: \Omega_k
+
+  # ── Derived ──────────────────────────────
+  omch2:
+    value: "lambda Omega_m, H0, ombh2: Omega_m * (H0/100)**2 - ombh2"
+    derived: false      # passed to CAMB
+
+  Omega_Lambda:
+    derived: "lambda Omega_m: 1.0 - Omega_m"
+    latex: \Omega_\Lambda
+
+  Omega_b:
+    derived: "lambda ombh2, H0: ombh2 / (H0/100)**2"
+    latex: \Omega_b
+
+  Omega_cdm:
+    derived: "lambda omch2, H0: omch2 / (H0/100)**2"
+    latex: \Omega_c
+
+sampler:
+  mcmc:
+    learn_proposal: True
+    learn_proposal_Rminus1_max: 30.0
+    Rminus1_stop: 0.01
+    max_tries: .inf
+
+force: True
+output: /data/AMARINS/dksCOBAYA/cobaya_outputs/camb_union3

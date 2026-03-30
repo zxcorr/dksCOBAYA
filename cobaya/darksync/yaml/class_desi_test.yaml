@@ -16,7 +16,7 @@ params:
       max: 80.0
     proposal: 0.5
     latex: H_0
-  Omega_cx`dm:
+  Omega_cdm:
     prior:
       dist: uniform    
       min: 0.01
@@ -26,7 +26,7 @@ params:
       loc: 0.12
       scale: 0.26
     proposal: 0.0005
-    latex: \Omega_\mathrm{dm}
+    latex: \Omega_\mathrm{c}
   Omega_b:
     prior:
       dist: uniform    
@@ -62,4 +62,4 @@ sampler:
 force: True
 #debug: True     
 
-output: /data/AMARINS/COBAYA_modified/cobaya/cobaya/darksync/outputs/class_desiDR2
+output: /data/AMARINS/dksCOBAYA/cobaya_outputs/class_desiDR2

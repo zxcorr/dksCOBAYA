@@ -2,7 +2,15 @@ theory:
   classy:
     stop_at_error: False
     extra_args:
-      non_linear: null
+      YHe: 0.2454
+      recombination: RECFAST
+      Omega_k: 0.0
+      Omega_fld: 0
+      Omega_scf: 0
+      N_ur: 0.00641
+      N_ncdm: 1
+      deg_ncdm: 3
+      m_ncdm: 0.42
 
 likelihood:
   sn.pantheonplus:
@@ -15,50 +23,63 @@ params:
       max: 80.0
     proposal: 0.5
     latex: H_0
-  Omega_cdm:
+
+  ombh2:
     prior:
-      dist: uniform    
-      min: 0.01
-      max: 0.45
+      dist: uniform
+      min: 0.005
+      max: 0.040
     ref:
       dist: norm
-      loc: 0.12
-      scale: 0.26
-    proposal: 0.0005
-    latex: \Omega_\mathrm{dm}
-  Omega_b:
+      loc: 0.0224
+      scale: 0.001
+    proposal: 0.001
+    latex: \Omega_b h^2
+    drop: True          # CLASS doesn't know ombh2
+
+  omch2:
     prior:
-      dist: uniform    
-      min: 0.001
-      max: 0.100
+      dist: uniform
+      min: 0.05
+      max: 0.25
     ref:
       dist: norm
-      loc: 0.04
-      scale: 0.0002
-    proposal: 0.0001
-    latex: \Omega_b
+      loc: 0.120
+      scale: 0.003
+    proposal: 0.002
+    latex: \Omega_c h^2
+    drop: True          # CLASS doesn't know omch2
+
+  Omega_b:              # what CLASS actually receives
+    value: "lambda ombh2, H0: ombh2 / (H0/100)**2"
+    derived: false
+
+  Omega_cdm:            # what CLASS actually receives
+    value: "lambda omch2, H0: omch2 / (H0/100)**2"
+    derived: false
+
   rdrag:
     derived: true
     latex: r_\mathrm{drag}
 
+  omegam:
+    derived: true
+    latex: \Omega_m
+
+  omegamh2:
+    derived: "lambda ombh2, omch2: ombh2 + omch2"
+    latex: \Omega_m h^2
+
+  Omega_Lambda:
+    derived: true
+    latex: \Omega_\Lambda
+
 sampler:
   mcmc:
-    #burn_in: 100  
-    Rminus1_stop: 0.01  # Gelman-Rubin R-1 on means
-    #Rminus1_single_split: 40 # Default is 4
-    #Rminus1_cl_stop: 0.2 # Default is 0.2 # Gelman-Rubin R-1 on std deviations
-    #Rminus1_cl_level: 0.95 # Default is 0.95
-    #burn_in: 30
-    #proposal_scale: 2.4 # Default, adjust if acceptance rate is too low/high
-    #learn_proposal: True
-    #learn_proposal_Rminus1_max: 2.0 # Default
-    #learn_proposal_Rminus1_max_early: 30.0 # Default
-    #learn_proposal_Rminus1_min: 0.0 # Default
-    max_tries: .inf # Default is 100 * n_params_vary
-    max_samples: .inf #50000 # Set a limit for testing
-    #seed: 42 # PS: in parallel runs, only works until to the first proposer covmat update.
-    measure_speeds: True  
-force: True
-#debug: True     
+    learn_proposal: True
+    learn_proposal_Rminus1_max: 30.0
+    Rminus1_stop: 0.01
+    max_tries: .inf
 
-output: /data/AMARINS/COBAYA_modified/cobaya/cobaya/darksync/outputs/class_pantheon
+force: True
+output: /data/AMARINS/dksCOBAYA/cobaya_outputs/class_pantheon

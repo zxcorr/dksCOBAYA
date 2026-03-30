@@ -32,8 +32,8 @@ $ python -c "from cobaya.theories.darksync.dkscobaya import dksLCDM; print(dksLC
 
 
 After you have create/update the DKS files, and since we are in cobaya developing mode, you need to recompile it
-$ cd /data/AMARINS/dksCOBAYA/cobaya/
-$ pip install -e .
+$ cd /data/AMARINS/dksCOBAYA/cobaya_core/
+$ python -m pip install -e .
 
 
 RUN:

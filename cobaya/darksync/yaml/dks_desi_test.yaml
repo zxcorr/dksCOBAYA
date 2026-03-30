@@ -60,4 +60,4 @@ sampler:
 force: True
 #debug: True     
 
-output: /data/AMARINS/COBAYA_modified/cobaya/cobaya/darksync/outputs/dks_desiDR2
+output: /data/AMARINS/dksCOBAYA/cobaya_outputs/dks_desiDR2

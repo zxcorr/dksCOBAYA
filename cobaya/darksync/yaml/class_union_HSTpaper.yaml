@@ -1,0 +1,72 @@
+theory:
+  classy:
+    stop_at_error: False
+    extra_args:
+      YHe: 0.2454
+      recombination: RECFAST
+      Omega_k: 0.0
+      Omega_fld: 0
+      Omega_scf: 0
+      N_ur: 0.00641
+      N_ncdm: 1
+      deg_ncdm: 3
+      m_ncdm: 0.42
+
+likelihood:
+  sn.union3:
+    #use_abs_mag: True
+
+params:
+  # ── Sampled ──────────────────────────────
+  Omega_m:
+    prior:
+      dist: uniform
+      min: 0.05
+      max: 0.90
+    ref:
+      dist: norm
+      loc: 0.30
+      scale: 0.01
+    proposal: 0.01
+    latex: \Omega_m
+
+  # ── Fixed (fiducial) ─────────────────────
+  H0:
+    value: 70.0         # degenerate with M_B; absorbed by likelihood
+    latex: H_0
+
+  Omega_b:
+    value: 0.044        # fiducial; CLASS receives this directly
+    latex: \Omega_b
+
+  # ── Derived (passed to CLASS) ─────────────
+  Omega_cdm:
+    value: "lambda Omega_m, Omega_b: Omega_m - Omega_b"
+    derived: false      # passed to CLASS, not stored in chain
+
+  # ── Derived (stored in chain) ─────────────
+  Omega_Lambda:
+    derived: "lambda Omega_m: 1.0 - Omega_m"
+    latex: \Omega_\Lambda
+
+  ombh2:
+    derived: "lambda Omega_b, H0: Omega_b * (H0/100)**2"
+    latex: \Omega_b h^2
+
+  omch2:
+    derived: "lambda Omega_cdm, H0: Omega_cdm * (H0/100)**2"
+    latex: \Omega_c h^2
+
+  omegamh2:
+    derived: "lambda Omega_m, H0: Omega_m * (H0/100)**2"
+    latex: \Omega_m h^2
+
+sampler:
+  mcmc:
+    learn_proposal: True
+    learn_proposal_Rminus1_max: 30.0
+    Rminus1_stop: 0.01
+    max_tries: .inf
+
+force: True
+output: /data/AMARINS/dksCOBAYA/cobaya_outputs/class_union3
